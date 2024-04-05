@@ -8,37 +8,35 @@ import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.kks.sololifeproject.MainActivity
 import com.kks.sololifeproject.R
-import com.kks.sololifeproject.databinding.ActivityIntroBinding
+import com.kks.sololifeproject.databinding.ActivityLoginBinding
 
-class IntroActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityIntroBinding
+class LoginActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_intro)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
-        binding.loginButton.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+        binding.completeLoginButton.setOnClickListener {
+            login()
         }
 
-        binding.registerButton.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.anonymousButton.setOnClickListener {
-            anonymousLogin()
-        }
     }
 
-    private fun anonymousLogin() {
+    private fun login() {
+        val email = binding.emailEditText.text.toString()
+        val password = binding.passwordEditText.text.toString()
         auth = FirebaseAuth.getInstance()
-        auth.signInAnonymously()
+
+        if (email.isEmpty() || password.isEmpty()) {
+            return
+        }
+
+        auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(
-                        baseContext, "Anonymous login success.",
+                        baseContext, "Login success.",
                         Toast.LENGTH_SHORT
                     ).show()
                     val intent = Intent(this, MainActivity::class.java)
@@ -46,7 +44,7 @@ class IntroActivity : AppCompatActivity() {
                     startActivity(intent)
                 } else {
                     Toast.makeText(
-                        baseContext, "Anonymous login failed.",
+                        baseContext, "Login failed.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
