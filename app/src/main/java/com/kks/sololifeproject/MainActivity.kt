@@ -17,9 +17,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        binding.logoutButton.setOnClickListener {
-            logout()
-        }
+//        binding.logoutButton.setOnClickListener {
+//            logout()
+//        }
     }
 
     private fun logout() {
